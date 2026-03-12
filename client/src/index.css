@@ -1,0 +1,88 @@
+/* --- Reset & Layout Dasar --- */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #f8f9fa;
+}
+
+/* --- Wrapper Utama --- */
+.d-flex {
+  display: flex;
+}
+
+/* --- Sidebar Styling (Terkunci & Fix Flex) --- */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1030;
+  background-color: #212529;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+}
+
+/* Nav didalam sidebar agar bisa menampung mt-auto */
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* --- Konten Utama --- */
+#content {
+  flex: 1;
+  margin-left: 260px;
+  min-height: 100vh;
+  width: calc(100% - 260px);
+}
+
+/* --- Nav Link Dasar --- */
+.nav-link {
+  color: rgba(255, 255, 255, 0.5) !important;
+  padding: 12px 25px;
+  margin: 2px 10px;
+  position: relative;
+  transition: all 0.2s ease;
+  display: block;
+  text-decoration: none;
+  background: transparent !important;
+  border-radius: 6px; /* Memberi sedikit lengkungan saat menu aktif disorot */
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.9) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* --- Styling Menu AKTIF (Sudah Diperbarui) --- */
+.nav-link.active {
+  color: #ffffff !important;
+  font-weight: 600;
+  /* Menggunakan warna yang lebih gelap/kontras dari background sidebar */
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Efek L Terbalik sudah dihapus */
+
+/* --- Tombol Logout (Tetap di Bawah) --- */
+.btn-link.nav-link {
+  border: none;
+  text-align: left;
+  width: auto;
+}
+
+.btn-link.nav-link:hover {
+  color: #ff4d4d !important;
+  background-color: rgba(255, 77, 77, 0.1) !important;
+}
+
+/* --- Area Navbar Atas --- */
+.navbar {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  z-index: 1020;
+}

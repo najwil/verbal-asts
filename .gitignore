@@ -1,0 +1,14 @@
+# Dependency folders
+node_modules/
+
+# Local env files
+.env
+.env.local
+
+# Build folders
+dist/
+build/
+
+# System files
+.DS_Store
+Thumbs.db
