@@ -4,13 +4,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const db = mysql.createPool({
-  // Baris di bawah akan mencoba membaca variabel Railway dulu,
-  // jika tidak ada baru membaca variabel dari file .env kamu.
-  host: process.env.MYSQLHOST || process.env.DB_HOST || "localhost",
-  user: process.env.MYSQLUSER || process.env.DB_USER || "root",
-  password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || "",
-  database: process.env.MYSQLDATABASE || process.env.DB_NAME || "db_schnw",
-  port: process.env.MYSQLPORT || 3306,
+  // Mengambil dari .env, jika .env kosong baru pakai default setelah tanda ||
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "db_verbal_asts", // Sesuaikan defaultnya di sini
+  port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -19,11 +18,13 @@ const db = mysql.createPool({
 // Tes Koneksi
 db.getConnection()
   .then((connection) => {
-    console.log("Database MySQL Terkoneksi!");
+    console.log(
+      `Database ${process.env.DB_NAME || "db_verbal_asts"} Terkoneksi!`,
+    );
     connection.release();
   })
   .catch((err) => {
-    console.error("Gagal Tersambung ke database: ", err);
+    console.error("Gagal Tersambung ke database: ", err.message);
   });
 
 export default db;

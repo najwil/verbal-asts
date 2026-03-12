@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
+import { API_URL } from "../config";
 
 function AdminMapel() {
   const [listMapel, setListMapel] = useState([]);
@@ -23,7 +24,7 @@ function AdminMapel() {
 
   const fetchMapel = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/mapel");
+      const res = await axios.get(`${API_URL}/api/mapel`);
       setListMapel(res.data);
       setSelectedIds([]);
     } catch (err) {
@@ -78,12 +79,12 @@ function AdminMapel() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/mapel/${editingId}`, {
+        await axios.put(`${API_URL}/api/mapel/${editingId}`, {
           nama_mapel: namaMapel,
         });
         Toast.fire({ icon: "success", title: "Mapel diperbarui" });
       } else {
-        await axios.post("http://localhost:5000/api/mapel/bulk", {
+        await axios.post(`${API_URL}/api/mapel/bulk`, {
           dataMapel: [[Number(id), namaMapel]],
         });
         Toast.fire({ icon: "success", title: "Mapel berhasil ditambah" });
@@ -115,12 +116,10 @@ function AdminMapel() {
       try {
         if (isMultiple) {
           await Promise.all(
-            idVal.map((id) =>
-              axios.delete(`http://localhost:5000/api/mapel/${id}`),
-            ),
+            idVal.map((id) => axios.delete(`${API_URL}/api/mapel/${id}`)),
           );
         } else {
-          await axios.delete(`http://localhost:5000/api/mapel/${idVal}`);
+          await axios.delete(`${API_URL}/api/mapel/${idVal}`);
         }
         fetchMapel();
         Toast.fire({ icon: "success", title: "Berhasil dihapus" });
@@ -162,7 +161,7 @@ function AdminMapel() {
 
   const handleSaveImport = async () => {
     try {
-      await axios.post("http://localhost:5000/api/mapel/bulk", {
+      await axios.post(`${API_URL}/api/mapel/bulk`, {
         dataMapel: dataToUpload,
       });
       Toast.fire({ icon: "success", title: "Impor berhasil" });

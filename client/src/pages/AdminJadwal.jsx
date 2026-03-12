@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
+import { API_URL } from "../config";
 
 function AdminJadwal() {
   const [listJadwal, setListJadwal] = useState([]);
@@ -47,10 +48,10 @@ function AdminJadwal() {
   const fetchData = async () => {
     try {
       const [resJadwal, resMapel, resGuru, resKelas] = await Promise.all([
-        axios.get("http://localhost:5000/api/jadwal"),
-        axios.get("http://localhost:5000/api/mapel"),
-        axios.get("http://localhost:5000/api/users/guru"),
-        axios.get("http://localhost:5000/api/kelas"),
+        axios.get(`${API_URL}/api/jadwal`),
+        axios.get(`${API_URL}/api/mapel`),
+        axios.get(`${API_URL}/api/users/guru`),
+        axios.get(`${API_URL}/api/kelas`),
       ]);
       setListJadwal(resJadwal.data);
       setListMapel(resMapel.data);
@@ -138,7 +139,7 @@ function AdminJadwal() {
           }
         });
 
-        await axios.post("http://localhost:5000/api/jadwal/bulk", {
+        await axios.post(`${API_URL}/api/jadwal/bulk`, {
           dataJadwal: finalPayload,
         });
         setUploading(false);
@@ -159,7 +160,7 @@ function AdminJadwal() {
     try {
       if (editingId) {
         // PERBAIKAN: Fungsi Edit (PUT)
-        await axios.put(`http://localhost:5000/api/jadwal/${editingId}`, {
+        await axios.put(`${API_URL}/api/jadwal/${editingId}`, {
           id_mapel: Number(idMapel),
           id_guru: Number(idGuru),
         });
@@ -179,7 +180,7 @@ function AdminJadwal() {
           Number(idGuru),
           Number(kId),
         ]);
-        await axios.post("http://localhost:5000/api/jadwal/bulk", {
+        await axios.post(`${API_URL}/api/jadwal/bulk`, {
           dataJadwal,
         });
         Toast.fire({ icon: "success", title: "Jadwal ditambahkan" });
@@ -205,11 +206,9 @@ function AdminJadwal() {
       try {
         if (isMultiple)
           await Promise.all(
-            idVal.map((id) =>
-              axios.delete(`http://localhost:5000/api/jadwal/${id}`),
-            ),
+            idVal.map((id) => axios.delete(`${API_URL}/api/jadwal/${id}`)),
           );
-        else await axios.delete(`http://localhost:5000/api/jadwal/${idVal}`);
+        else await axios.delete(`${API_URL}/api/jadwal/${idVal}`);
         fetchData();
         setSelectedIds([]);
         Toast.fire({ icon: "success", title: "Berhasil dihapus" });

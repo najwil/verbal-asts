@@ -2,6 +2,7 @@ import { Routes, Route, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import GuruJadwal from "./GuruJadwal";
+import { API_URL } from "../config";
 
 function GuruPanel({ user, onLogout }) {
   const [listJadwal, setListJadwal] = useState([]);
@@ -21,9 +22,7 @@ function GuruPanel({ user, onLogout }) {
   useEffect(() => {
     const fetchJadwal = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/jadwal/guru/${user.id}`,
-        );
+        const res = await axios.get(`${API_URL}/api/jadwal/guru/${user.id}`);
 
         const sortedData = res.data.sort((a, b) => {
           if (a.tingkat !== b.tingkat) {

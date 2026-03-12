@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
+import { API_URL } from "../config";
 
 function AdminRekap() {
   const [listKelas, setListKelas] = useState([]);
@@ -21,8 +22,8 @@ function AdminRekap() {
 
   const fetchFilterData = async () => {
     try {
-      const resKelas = await axios.get("http://localhost:5000/api/kelas");
-      const resMapel = await axios.get("http://localhost:5000/api/mapel");
+      const resKelas = await axios.get(`${API_URL}/api/kelas`);
+      const resMapel = await axios.get(`${API_URL}/api/mapel`);
       const sortedKelas = resKelas.data.sort(
         (a, b) =>
           a.tingkat - b.tingkat || a.nama_kelas.localeCompare(b.nama_kelas),
@@ -73,7 +74,7 @@ function AdminRekap() {
       const idsKelas = selectedKelas.join(",");
       const idsMapel = selectedMapels.join(",");
       const res = await axios.get(
-        `http://localhost:5000/api/rekap-nilai?id_kelas=${idsKelas}&id_mapel=${idsMapel}`,
+        `${API_URL}/api/rekap-nilai?id_kelas=${idsKelas}&id_mapel=${idsMapel}`,
       );
 
       const grouped = res.data.reduce((acc, curr) => {
@@ -139,12 +140,9 @@ function AdminRekap() {
           const idsMapel = selectedMapels.join(",");
 
           // Menggunakan URL /massal/hapus agar sinkron dengan index.js terbaru
-          const res = await axios.delete(
-            "http://localhost:5000/api/nilai/massal/hapus",
-            {
-              params: { id_kelas: idsKelas, id_mapel: idsMapel },
-            },
-          );
+          const res = await axios.delete(`${API_URL}/api/nilai/massal/hapus`, {
+            params: { id_kelas: idsKelas, id_mapel: idsMapel },
+          });
 
           if (res.data.success) {
             Swal.fire("Berhasil", res.data.message, "success");

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
+import { API_URL } from "../config";
 
 function AdminSiswa() {
   const [listSiswa, setListSiswa] = useState([]);
@@ -46,7 +47,7 @@ function AdminSiswa() {
 
   const fetchSiswa = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/siswa");
+      const res = await axios.get(`${API_URL}/api/siswa`);
       setListSiswa(res.data);
       const uniqueKelas = [...new Set(res.data.map((s) => s.nama_kelas))]
         .filter(Boolean)
@@ -173,14 +174,14 @@ function AdminSiswa() {
     }
     try {
       if (editingNis) {
-        await axios.put(`http://localhost:5000/api/siswa/${editingNis}`, {
+        await axios.put(`${API_URL}/api/siswa/${editingNis}`, {
           nama_siswa: nama,
           jenis_kelamin: jk,
           id_kelas: Number(idKelas),
         });
         Toast.fire({ icon: "success", title: "Data diperbarui" });
       } else {
-        await axios.post("http://localhost:5000/api/siswa/bulk", {
+        await axios.post(`${API_URL}/api/siswa/bulk`, {
           dataSiswa: [[Number(nis), nama, jk, Number(idKelas)]],
         });
         Toast.fire({ icon: "success", title: "Siswa ditambahkan" });
@@ -208,7 +209,7 @@ function AdminSiswa() {
     });
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/api/siswa/${nisVal}`);
+        await axios.delete(`${API_URL}/api/siswa/${nisVal}`);
         fetchSiswa();
         Toast.fire({ icon: "success", title: "Data berhasil dihapus" });
       } catch (err) {
@@ -229,9 +230,7 @@ function AdminSiswa() {
     if (result.isConfirmed) {
       try {
         await Promise.all(
-          selectedNis.map((id) =>
-            axios.delete(`http://localhost:5000/api/siswa/${id}`),
-          ),
+          selectedNis.map((id) => axios.delete(`${API_URL}/api/siswa/${id}`)),
         );
         fetchSiswa();
         Toast.fire({
@@ -246,7 +245,7 @@ function AdminSiswa() {
 
   const handleSaveImport = async () => {
     try {
-      await axios.post("http://localhost:5000/api/siswa/bulk", {
+      await axios.post(`${API_URL}/api/siswa/bulk`, {
         dataSiswa: dataToUpload,
       });
       Toast.fire({

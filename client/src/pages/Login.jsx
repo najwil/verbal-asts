@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_URL } from "../config";
 
 function Login({ setUser }) {
   // State untuk menyimpan apa yang diketik user
@@ -14,7 +15,7 @@ function Login({ setUser }) {
 
     try {
       // Mengirim data ke API Backend
-      const response = await axios.post("http://localhost:5000/api/login", {
+      const response = await axios.post(`${API_URL}/api/login`, {
         username,
         password,
       });

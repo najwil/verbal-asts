@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
+import { API_URL } from "../config";
 
 function AdminGuru() {
   const [listGuru, setListGuru] = useState([]);
@@ -37,7 +38,7 @@ function AdminGuru() {
 
   const fetchGuru = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users/guru");
+      const res = await axios.get(`${API_URL}/api/users/guru`);
       setListGuru(res.data);
       setSelectedIds([]);
     } catch (err) {
@@ -101,7 +102,7 @@ function AdminGuru() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/users/${editingId}`, {
+        await axios.put(`${API_URL}/api/users/${editingId}`, {
           username,
           password,
           nama_lengkap: namaLengkap,
@@ -109,7 +110,7 @@ function AdminGuru() {
         });
         Toast.fire({ icon: "success", title: "Data guru diperbarui" });
       } else {
-        await axios.post("http://localhost:5000/api/users/bulk", {
+        await axios.post(`${API_URL}/api/users/bulk`, {
           dataUser: [[Number(id), username, password, namaLengkap, "guru"]],
         });
         Toast.fire({ icon: "success", title: "Guru berhasil ditambahkan" });
@@ -141,12 +142,10 @@ function AdminGuru() {
       try {
         if (isMultiple) {
           await Promise.all(
-            idVal.map((id) =>
-              axios.delete(`http://localhost:5000/api/users/${id}`),
-            ),
+            idVal.map((id) => axios.delete(`${API_URL}/api/users/${id}`)),
           );
         } else {
-          await axios.delete(`http://localhost:5000/api/users/${idVal}`);
+          await axios.delete(`${API_URL}/api/users/${idVal}`);
         }
         fetchGuru();
         Toast.fire({ icon: "success", title: "Berhasil dihapus" });
@@ -158,7 +157,7 @@ function AdminGuru() {
 
   const handleSaveImport = async () => {
     try {
-      await axios.post("http://localhost:5000/api/users/bulk", {
+      await axios.post(`${API_URL}/api/users/bulk`, {
         dataUser: dataToUpload,
       });
       Toast.fire({ icon: "success", title: "Berhasil impor data" });

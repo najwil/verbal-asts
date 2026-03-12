@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
+import { API_URL } from "../config";
 
 function AdminKelas() {
   const [listKelas, setListKelas] = useState([]);
@@ -28,7 +29,7 @@ function AdminKelas() {
 
   const fetchKelas = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/kelas");
+      const res = await axios.get(`${API_URL}/api/kelas`);
       setListKelas(res.data);
       setSelectedIds([]);
     } catch (err) {
@@ -65,13 +66,13 @@ function AdminKelas() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/kelas/${editingId}`, {
+        await axios.put(`${API_URL}/api/kelas/${editingId}`, {
           tingkat: String(tingkat),
           nama_kelas: namaKelas,
         });
         Toast.fire({ icon: "success", title: "Kelas berhasil diperbarui" });
       } else {
-        await axios.post("http://localhost:5000/api/kelas/bulk", {
+        await axios.post(`${API_URL}/api/kelas/bulk`, {
           dataKelas: [[Number(idInput), String(tingkat), namaKelas]],
         });
         Toast.fire({ icon: "success", title: "Kelas berhasil ditambahkan" });
@@ -101,7 +102,7 @@ function AdminKelas() {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/api/kelas/${id}`);
+        await axios.delete(`${API_URL}/api/kelas/${id}`);
         fetchKelas();
         Toast.fire({ icon: "success", title: "Kelas berhasil dihapus" });
       } catch (err) {
@@ -127,9 +128,7 @@ function AdminKelas() {
     if (result.isConfirmed) {
       try {
         await Promise.all(
-          selectedIds.map((id) =>
-            axios.delete(`http://localhost:5000/api/kelas/${id}`),
-          ),
+          selectedIds.map((id) => axios.delete(`${API_URL}/api/kelas/${id}`)),
         );
         fetchKelas();
         Toast.fire({ icon: "success", title: "Data terpilih dihapus" });
@@ -187,7 +186,7 @@ function AdminKelas() {
 
   const handleSaveImport = async () => {
     try {
-      await axios.post("http://localhost:5000/api/kelas/bulk", {
+      await axios.post(`${API_URL}/api/kelas/bulk`, {
         dataKelas: dataImport,
       });
       Toast.fire({

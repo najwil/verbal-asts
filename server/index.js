@@ -7,7 +7,14 @@ dotenv.config();
 const app = express();
 
 // Konfigurasi Middleware
-app.use(cors()); // Mengizinkan akses API dari domain yang berbeda (CORS)
+// Mengembalikan settingan CORS ke localhost:5173 agar lebih aman dan stabil di komputer sendiri
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
+
 app.use(express.json()); // Mengizinkan server menerima dan membaca data berformat JSON di body request
 
 // ================= API LOGIN =================
@@ -586,6 +593,6 @@ app.get("/api/rekap-nilai", async (req, res) => {
  */
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log(`Server Running on Port ${PORT}`);
 });

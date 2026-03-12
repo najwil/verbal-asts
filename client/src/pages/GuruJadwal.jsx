@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_URL } from "../config";
 
 function GuruJadwal({ user }) {
   const { id_jadwal } = useParams();
@@ -39,19 +40,17 @@ function GuruJadwal({ user }) {
 
   const fetchData = async () => {
     try {
-      const resJadwal = await axios.get(`http://localhost:5000/api/jadwal`);
+      const resJadwal = await axios.get(`${API_URL}/api/jadwal`);
       const detail = resJadwal.data.find((j) => j.id.toString() === id_jadwal);
       setInfoJadwal(detail);
 
       if (detail) {
         const resSiswa = await axios.get(
-          `http://localhost:5000/api/siswa/kelas/${detail.id_kelas}`,
+          `${API_URL}/api/siswa/kelas/${detail.id_kelas}`,
         );
         setListSiswa(resSiswa.data);
 
-        const resNilai = await axios.get(
-          `http://localhost:5000/api/nilai/${id_jadwal}`,
-        );
+        const resNilai = await axios.get(`${API_URL}/api/nilai/${id_jadwal}`);
         const dataTerSimpan = {};
         resNilai.data.forEach((n) => {
           dataTerSimpan[n.id_siswa] = {
@@ -101,7 +100,7 @@ function GuruJadwal({ user }) {
         },
       ];
 
-      await axios.post("http://localhost:5000/api/nilai/bulk", { dataNilai });
+      await axios.post(`${API_URL}/api/nilai/bulk`, { dataNilai });
 
       setNilaiSiswa((prev) => ({
         ...prev,
@@ -133,9 +132,7 @@ function GuruJadwal({ user }) {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(
-          `http://localhost:5000/api/nilai/${id_jadwal}/${siswaId}`,
-        );
+        await axios.delete(`${API_URL}/api/nilai/${id_jadwal}/${siswaId}`);
 
         const currentNilai = { ...nilaiSiswa };
         delete currentNilai[siswaId];
